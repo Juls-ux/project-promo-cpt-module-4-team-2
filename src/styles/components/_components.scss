@@ -1,0 +1,74 @@
+.title {
+    text-align: center;
+    text-transform: capitalize;
+  }
+  
+  .button--link {
+    display: block;
+    width: fit-content;
+  
+    margin-inline: auto;
+    margin-block: 8px;
+    padding: 5px 18px;
+    color: var(--color-white);
+    font: var(--font-button);
+    text-transform: uppercase;
+    text-decoration: none;
+  
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-style: solid;
+    border-width: 1px;
+    border-image-source: linear-gradient(to bottom, #2a2a2a 0%, rgba(0, 0, 0, 0));
+    border-image-slice: 1;
+    border-radius: 20px;
+    background-color: var(--color-dark-lilac);
+    /*
+    background-image: linear-gradient(to bottom, var(--color-dark-lilac), var(--color-dark-lilac)), linear-gradient(to bottom, #2a2a2a 0%, rgba(0, 0, 0, 0));
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    */
+  }
+  
+  .button {
+    display: block;
+    min-width: 120px;
+    max-width: 150px;
+  
+    margin: 8px;
+    padding: 5px 18px;
+    color: var(--color-white);
+    font: var(--font-button);
+    text-transform: none;
+    text-decoration: none;
+    text-align: center;
+  
+    border-radius: 40px;
+    background-image: linear-gradient(to right, var(--color-dark-lilac) -2%, #c0b7e8 98%);
+  
+    cursor: pointer;
+  }
+  
+  .button--large {
+    display: block;
+    width: 145px;
+  
+    margin-inline: auto;
+    margin-block: 8px;
+    padding: 5px 18px;
+    color: var(--color-white);
+    font: var(--font-button);
+    text-transform: none;
+    text-decoration: none;
+    text-align: center;
+  
+    border-radius: 40px;
+    background-color: transparent;
+    background-image: linear-gradient(to right, var(--color-dark-lilac) -2%, #c0b7e8 98%);
+  
+    cursor: pointer;
+  }
+  
+  .button--large:hover {
+    border-color: var(--color-white);
+  }
