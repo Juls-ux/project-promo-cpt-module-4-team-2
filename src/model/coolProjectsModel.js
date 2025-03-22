@@ -1,5 +1,4 @@
 const { v4: uuid } = require('uuid');
-
 const COOL_PROJECTS_STORAGE = [];
 
 
@@ -10,18 +9,25 @@ async function create(data) {
     INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, desc, image)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `,
-    [ generated_id, data.name, data.slogan, data.repo, data.demo, data.technologies, data.desc, data.image])
+  [ generated_id, data.name, data.slogan, data.repo, data.demo, data.technologies, data.desc, data.image])
 
-  console.log(projectData);
-
-  return generated_id;
+ // return generated_id;
+  
+  // Cerrar la conexión
+  await conn.end();
+  
+  // Verificar si se encontraron resultados
+  if (results.length > 0) {
+      return results[0];  // Retornar el primer (y único) resultado
+  } else {
+      return null;  // Si no hay resultados, devolver null
+  }
 }
 
-function get(project_id) {
+function get(id_projects) {
 
-  // SELECT * FROM project JOIN authors ON (project.project_id = authors.project_id) WHERE project_id = ? 
-
-  return COOL_PROJECTS_STORAGE.find(it => it.id === project_id)
+ // SELECT * FROM projects JOIN authors ON (projects.id_projects = authors.id_projects) WHERE project_id = ?;
+ return COOL_PROJECTS_STORAGE.find(it => it.id === id_projects)
 }
 
 module.exports = {

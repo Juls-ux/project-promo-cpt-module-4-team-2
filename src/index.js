@@ -153,22 +153,22 @@ app.post('/api/projectCard/', async (req, res) => {
 
 app.get('/projectCard/:id_projects', async (req, res) => {
 
-    console.log(req.params.id_projects);
-    
-    // SELECT
-
-
+    //SELECT
+    const projectData = await coolProjectsModel.get(req.params.id_projects);
+    if (!projectData) {
+        return res.status(404).send('Proyecto no encontrado');
+    }
     
     // EJS
     res.render('projectCard', {projectData})
-  });
+
+});
+    
   
+// Servidor de estáticos
+const path = require('node:path');
   
-  // Servidor de estáticos
-  
-  const path = require('node:path');
-  
-  //app.use(express.static(path.join(__dirname, 'static_detail_styles')));
+app.use(express.static(path.join(__dirname, 'static_detail_styles')));
   
   //app.use(express.static(path.join(__dirname, 'static_public_frontend')));
   
