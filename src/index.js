@@ -131,13 +131,13 @@ app.post('/api/projectCard/', async (req, res) => {
             [id_projects, author, job, photo]
         );
 
-        // Crear la URL de la tarjeta del proyecto
-        const cardURL = `${req.protocol}://${req.hostname}/projectCard/${id_projects}`;
+  
 
+        const id = await coolProjectsModel.create(req.body);
         // Responder con éxito y la URL de la tarjeta
         res.json({
             success: true,
-            cardURL: cardURL
+            cardURL: `${req.protocol}://${req.hostname}/projectCard/${id}`
         });
 
         await conn.end();
@@ -160,12 +160,16 @@ app.get('/projectCard/:project_id', async (req, res) => {
     console.log(req.params.id_projects);
     
     // SELECT
-    //const projectData = coolProjectsModel.get(req.params.id_projects);
+    const [results] = conn.execute(`
+        INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, desc, image)
+        VALUES (?, ?, ?);
+        `,
+        [ generated_id, data.name, data.slogan, data.repo, data.demo, data.technologies, data.desc, data.image])
   
     console.log(projectData);
   
     // EJS
-    res.render('projectDetail', {projectData})
+    res.render('projectCard', {projectData})
   });
   
   
@@ -180,3 +184,6 @@ app.get('/projectCard/:project_id', async (req, res) => {
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
   });
+
+
+  ////SELECT * FROM projects p JOIN authors a ON (p.id_projects = a.id_projects);

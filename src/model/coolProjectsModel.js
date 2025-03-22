@@ -25,7 +25,7 @@ function get(project_id) {
 
   // SELECT * FROM project JOIN authors ON (project.project_id = authors.project_id) WHERE project_id = ? 
 
-  return COOL_PROJECTS_STORAGE.find(it => it.id === projects_id)
+  return COOL_PROJECTS_STORAGE.find(it => it.id === project_id)
 }
 
 module.exports = {
