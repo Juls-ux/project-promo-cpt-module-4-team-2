@@ -14,7 +14,7 @@ const INIT_OBJ = {
   repo: "",
   demo: "",
   desc: "",
-  autor: "",
+  author: "",
   job: "",
   photo: "",
   image: "",
@@ -27,7 +27,7 @@ const INIT_ERRORS = {
   repo: "",
   demo: "",
   desc: "",
-  autor: "",
+  author: "",
   job: "",
   image: "",
   photo: "",
@@ -49,15 +49,15 @@ function App() {
     localStorage.setItem("projectData", JSON.stringify(formData));
   }, [formData]);
 
-  const handleFetch = (ev) => {
+  const handleFetch = async (ev) => {
     ev.preventDefault();
     const isValid = validateForm();
     setFetchError('');
     
     
     if(isValid) {
-    
-    fetch('http://localhost:3000/projectCard/${projectId}', {
+   
+    const res = await fetch('http://localhost:3000/api/projectCard/', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body:JSON.stringify(formData)
@@ -112,8 +112,8 @@ function App() {
       isValid = false;
     }
 
-    if (!formData.autor.trim()) {
-      newErrors.autor = "Campo Obligatorio";
+    if (!formData.author.trim()) {
+      newErrors.author = "Campo Obligatorio";
       isValid = false;
     }
 

@@ -3,10 +3,12 @@ const mysql = require ('mysql2/promise');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const { v4: uuid } = require('uuid');
+
+const coolProjectsModel = require('./model/coolProjectsModel');
+const verifiers = require('./utils/verifiers');
 
 const ejs = require('ejs'); // Importar EJS
-const { v4: uuidv4 } = require('uuid'); // Importar UUID
-
 
 async function getConnection() {
     const connectionData = {
@@ -29,7 +31,7 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 
 // Ruta de ejemplo
@@ -41,11 +43,10 @@ app.get('/', (req, res) => {
 
 //Arrancamos Servidor
 
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Example app listening on port<http://localhost:${port}>`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Cool Projects server started at <http://localhost:${PORT}/>`);  
 });
-
 
 
 //1º endpoint Proyectos Molones-- AUTHORS
@@ -89,53 +90,93 @@ app.get('/api/projects', async (req, res) => {
 });
 
 
+
 //3º endpoint con UUID
 app.post('/api/projectCard/', async (req, res) => {
-    const conn = await getConnection();
-    const { name, slogan, technologies, repo, demo, desc, autor, job, photo, image } = req.body;
-
-    if (!name || !autor) {
-        return res.status(400).json({ success: false, error: "Faltan datos obligatorios" });
-    }
-
-    const projectId = uuidv4();
-    const authorId = uuidv4();
-    
     try {
-        // Insertar autora
-        await conn.query(
-            `INSERT INTO authors (id, name, job, photo) VALUES (?, ?, ?, ?)`,
-            [authorId, autor, job, photo]
-        );
+        // Validación de datos vacíos
+        if (checkEmpty(req.body.name)) {
+            return res.status(400).json({
+                success: false,
+                error: 'El nombre del proyecto está vacío'
+            });
+        }
 
-        // Insertar proyecto
-        await conn.query(
-            `INSERT INTO projects (id, name, slogan, technologies, repo, demo, description, image, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [projectId, name, slogan, technologies, repo, demo, desc, image, authorId]
-        );
+        if (checkEmpty(req.body.author)) {
+            return res.status(400).json({
+                success: false,
+                error: 'El nombre de la autora está vacío'
+            });
+        }
 
-        // Datos para la plantilla EJS
-        const datosQueLePasamosALaPlantilla = {
-            projectId,
-            name,
-            slogan,
-            technologies,
-            repo,
-            demo,
-            desc,
-            autor,
-            job,
-            photo,
-            image
-        };
+        // Generar UUID para el proyecto
+        const id_projects = uuid();
 
-        // Renderizar la plantilla con los datos
-        res.render('projectCard', datosQueLePasamosALaPlantilla);
+        // Obtener datos del cuerpo de la solicitud
+        const { name, slogan, repo, demo, technologies, desc, image, author, job, photo } = req.body;
+
+        // Conexión a la base de datos
+        const conn = await getConnection();
         
-        await conn.end();
+        // Insertar el proyecto en la base de datos
+        await conn.execute(
+            `INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, description, project_img) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [id_projects, name, slogan, repo, demo, technologies, desc, image]
+        );
+        
+        // Insertar la autora en la base de datos
+        await conn.execute(
+            `INSERT INTO authors (id_projects, author, job, author_img) VALUES (?, ?, ?, ?)`,
+            [id_projects, author, job, photo]
+        );
 
-    } catch (error) {
-        console.error("Error al insertar en la BD:", error);
-        res.status(500).json({ success: false, error: "Error en el servidor" });
+        // Crear la URL de la tarjeta del proyecto
+        const cardURL = `${req.protocol}://${req.hostname}/projectCard/${id_projects}`;
+
+        // Responder con éxito y la URL de la tarjeta
+        res.json({
+            success: true,
+            cardURL: cardURL
+        });
+
+        await conn.end();
+    } catch (err) {
+        console.error("Error al insertar en la BD:", err);
+        res.status(500).json({
+            success: false,
+            error: 'El servidor no está disponible en estos momentos'
+        });
     }
 });
+
+function checkEmpty(value) {
+    return !value || value.trim().length === 0;
+}
+
+
+app.get('/projectCard/:project_id', async (req, res) => {
+
+    console.log(req.params.id_projects);
+    
+    // SELECT
+    //const projectData = coolProjectsModel.get(req.params.id_projects);
+  
+    console.log(projectData);
+  
+    // EJS
+    res.render('projectDetail', {projectData})
+  });
+  
+  
+  // Servidor de estáticos
+  
+  const path = require('node:path');
+  
+  app.use(express.static(path.join(__dirname, 'static_detail_styles')));
+  
+  app.use(express.static(path.join(__dirname, 'static_public_frontend')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
+  });

@@ -116,13 +116,13 @@ function Form({ formData, handleInputChange, errors, fetchError, handleFetch, pr
           <input
             className="addForm__input"
             type="text"
-            name="autor"
-            id="autor"
+            name="author"
+            id="author"
             placeholder="Nombre"
-            value={formData.autor}
+            value={formData.author}
             onChange={handleInput}
           />
-          {errors.autor && <p className="error">{errors.autor}</p>}
+          {errors.author && <p className="error">{errors.author}</p>}
         </div>
 
         <div className="form-field">
@@ -163,7 +163,7 @@ function Form({ formData, handleInputChange, errors, fetchError, handleFetch, pr
         .replace('demo', 'Demo')
         .replace('repo','Repositorio')
         .replace('desc','Descripción')
-        .replace('autor', 'Nombre de la autora')
+        .replace('author', 'Nombre de la autora')
         .replace('job', 'Trabajo de la autora')
         .replace('image', 'Foto del proyecto')
         .replace('photo', 'Foto del autor')}

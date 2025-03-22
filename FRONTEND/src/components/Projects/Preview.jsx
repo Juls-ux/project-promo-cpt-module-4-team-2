@@ -10,7 +10,7 @@ function Preview({formData}) {
         <div className="card__author">
           <div className="card__authorPhoto"  style={{ backgroundImage: formData.photo ? `url(${formData.photo})` : null }}></div>
           <p className="card__job">{formData.job || "Full stack Developer"}</p>
-          <h3 className="card__name">{formData.autor || "Emmelie Bjôrklund"}</h3>
+          <h3 className="card__name">{formData.author || "Emmelie Bjôrklund"}</h3>
         </div>
 
         <div className="card__project">
