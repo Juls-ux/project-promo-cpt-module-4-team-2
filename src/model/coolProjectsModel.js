@@ -6,17 +6,13 @@ const COOL_PROJECTS_STORAGE = [];
 async function create(data) {
   const generated_id = uuid();
 
-  // INSERT
-  /*
   const [results] = conn.execute(`
-    INSERT INTO projects (id_project, name, slogan)
-    VALUES (?, ?, ?);
+    INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, desc, image)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `,
-    [new_and_shinny_id, data.name, data.slogan, data.repo])
-  */
+    [ generated_id, data.name, data.slogan, data.repo, data.demo, data.technologies, data.desc, data.image])
 
-  data.id = generated_id;
-  COOL_PROJECTS_STORAGE.push(data);
+  console.log(projectData);
 
   return generated_id;
 }

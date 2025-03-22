@@ -36,8 +36,8 @@ app.use(express.json({ limit: '50mb' }));
 
 // Ruta de ejemplo
 app.get('/', (req, res) => {
-    const idUnico = uuidv4(); // Generar un UUID único
-    res.render('index', { id: idUnico }); // Pasar el UUID a la plantilla
+    const idUnico = uuid(); // Generar un UUID único
+    res.render('projectCard', { id: idUnico }); // Pasar el UUID a la plantilla
 });
 
 
@@ -95,14 +95,14 @@ app.get('/api/projects', async (req, res) => {
 app.post('/api/projectCard/', async (req, res) => {
     try {
         // Validación de datos vacíos
-        if (checkEmpty(req.body.name)) {
+        if (verifiers.checkEmpty(req.body.name)) {
             return res.status(400).json({
                 success: false,
                 error: 'El nombre del proyecto está vacío'
             });
         }
 
-        if (checkEmpty(req.body.author)) {
+        if (verifiers.checkEmpty(req.body.author)) {
             return res.status(400).json({
                 success: false,
                 error: 'El nombre de la autora está vacío'
@@ -150,24 +150,15 @@ app.post('/api/projectCard/', async (req, res) => {
     }
 });
 
-function checkEmpty(value) {
-    return !value || value.trim().length === 0;
-}
 
-
-app.get('/projectCard/:project_id', async (req, res) => {
+app.get('/projectCard/:id_projects', async (req, res) => {
 
     console.log(req.params.id_projects);
     
     // SELECT
-    const [results] = conn.execute(`
-        INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, desc, image)
-        VALUES (?, ?, ?);
-        `,
-        [ generated_id, data.name, data.slogan, data.repo, data.demo, data.technologies, data.desc, data.image])
-  
-    console.log(projectData);
-  
+
+
+    
     // EJS
     res.render('projectCard', {projectData})
   });
@@ -177,13 +168,13 @@ app.get('/projectCard/:project_id', async (req, res) => {
   
   const path = require('node:path');
   
-  app.use(express.static(path.join(__dirname, 'static_detail_styles')));
+  //app.use(express.static(path.join(__dirname, 'static_detail_styles')));
   
-  app.use(express.static(path.join(__dirname, 'static_public_frontend')));
+  //app.use(express.static(path.join(__dirname, 'static_public_frontend')));
   
-  app.get('*', (req, res) => {
+  /*app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
-  });
+  });*/
 
 
   ////SELECT * FROM projects p JOIN authors a ON (p.id_projects = a.id_projects);

@@ -1,42 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=<%= viewportWidth %>, initial-scale=1.0">
-    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de proyecto molón</title>
   </head>
   <body>
-    <header class="header">
-      <a class="header__brand" href="./" title="Haz click para volver a la página inicial">
-        <img class="header__companyLogo" src="<%= logoSrc %>" alt="<%= logoAlt %>">
-        <h1 class="header__title"><%= headerTitle %></h1>
-      </a>
-      <img class="logoSponsor" src="<%= sponsorLogoSrc %>" alt="<%= sponsorLogoAlt %>">
-    </header>
-
-    <section class="preview">
-        <div class="projectImage" style="<%= projectImageStyle %>"></div>
-        <article class="card">
-          <h2 class="card__projectTitle">
-            <span class="card__projectTitle--text"><%= projectTitle %></span>
-          </h2>
-          <div class="card__author">
-            <div class="card__authorPhoto" style="<%= authorPhotoStyle %>"></div>
-            <p class="card__job"><%= projectData.job %></p>
-            <h3 class="card__name"><%= projectData.author%></h3>
-          </div>
-          <div class="card__project">
-            <h3 class="card__name"><%= projectData.name %></h3>
-            <p class="card__slogan"><%= projectData.slogan %></p>
-          
-            <p class="card__description"><%= projectData.desc %></p>
-            <div class="card__technicalInfo">
-              <p class="card__technologies"><%= projectData.technologies %></p>
-              <a class="icon icon__www" href="<%= webLink %>" title="Haz click para ver el proyecto online" target="_blank" rel="noopener noreferrer">Web link</a>
-              <a class="icon icon__github" href="<%= githubLink %>" title="Haz click para ver el código del proyecto" target="_blank" rel="noopener noreferrer">GitHub link</a>
-            </div>
-          </div>
-        </article>
-      </section>
   </body>
 </html>
