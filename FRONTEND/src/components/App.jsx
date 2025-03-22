@@ -57,7 +57,7 @@ function App() {
     
     if(isValid) {
     
-    fetch('https://dev.adalab.es/api/projectCard', {
+    fetch('http://localhost:3000/projectCard/${projectId}', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body:JSON.stringify(formData)
