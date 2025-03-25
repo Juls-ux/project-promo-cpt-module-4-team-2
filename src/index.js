@@ -141,23 +141,29 @@ app.get('/projectCard/:id_projects', async (req, res) => {
 
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
+    const conn = await getConnection(); 
+   
+    try {
+       
+        const query = `
+          SELECT * FROM defaultdb.projects
+	JOIN authors ON projects.id_projects = authors.id_projects
+	ORDER BY projects.id_projects DESC
+	LIMIT 5
+        `;
+        
+        
+        const [rows] = await conn.query(query);
+        res.json(rows);
 
-    const conn = await getConnection();
+    } catch (error) {
+        console.error("Error fetching projects:", error);
+        res.status(500).json({ error: 'Error fetching projects' });
 
-    const [results] = await conn.query(`SELECT * FROM defaultdb.authors;`);
-
-    await conn.end();
-
-    const numOfElements = results.length;
-
-    res.json({
-        info: { count: numOfElements },
-        results: results,
-
-    });
-
+    } finally {
+        if (conn) await conn.end(); // Cerrar conexión siempre
+    }
 });
-
 
 // Servidor de estáticos
 const path = require('node:path');
