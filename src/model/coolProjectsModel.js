@@ -73,7 +73,7 @@ async function get(id_projects) {
  const [results] = await conn.query(`SELECT * FROM projects JOIN authors ON (projects.id_projects = authors.id_projects) WHERE projects.id_projects = ?;`, [id_projects]);
 
  await conn.end();
-  // CACA  return COOL_PROJECTS_STORAGE.find(it => it.id === id_projects)
+
 
   return results[0];
 }

@@ -126,7 +126,7 @@ app.post('/api/projectCard/', async (req, res) => {
 
 app.get('/projectCard/:id_projects', async (req, res) => {
 
-    
+
     //SELECT
     const projectData = await coolProjectsModel.get(req.params.id_projects);
     if (!projectData) {
@@ -138,7 +138,27 @@ app.get('/projectCard/:id_projects', async (req, res) => {
 
 });
     
-  
+
+//4º Endpoint LISTADO DE PROYECTOS
+app.get('/api/projects-list', async (req, res) => {
+
+    const conn = await getConnection();
+
+    const [results] = await conn.query(`SELECT * FROM defaultdb.authors;`);
+
+    await conn.end();
+
+    const numOfElements = results.length;
+
+    res.json({
+        info: { count: numOfElements },
+        results: results,
+
+    });
+
+});
+
+
 // Servidor de estáticos
 const path = require('node:path');
   
