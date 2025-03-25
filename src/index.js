@@ -149,7 +149,7 @@ app.get('/api/projects-list', async (req, res) => {
           SELECT * FROM defaultdb.projects
 	JOIN authors ON projects.id_projects = authors.id_projects
 	ORDER BY projects.id_projects DESC
-	LIMIT 5
+	LIMIT 3
         `;
         
         

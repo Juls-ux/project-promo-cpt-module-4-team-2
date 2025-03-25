@@ -1,0 +1,16 @@
+.listado{
+&__ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+&__img{
+    width: 150px;
+    height: 150px;
+
+  background-size: cover;
+  background-position: center;
+    
+}
+}
