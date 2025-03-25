@@ -6,7 +6,7 @@ require('dotenv').config();
 const { v4: uuid } = require('uuid');
 
 const coolProjectsModel = require('./model/coolProjectsModel');
-const verifiers = require('./utils/verifiers');
+
 
 const ejs = require('ejs'); // Importar EJS
 
@@ -94,51 +94,24 @@ app.get('/api/projects', async (req, res) => {
 //3º endpoint con UUID
 app.post('/api/projectCard/', async (req, res) => {
     try {
-        // Validación de datos vacíos
-        if (verifiers.checkEmpty(req.body.name)) {
-            return res.status(400).json({
-                success: false,
-                error: 'El nombre del proyecto está vacío'
-            });
-        }
+       const id = await coolProjectsModel.create(req.body);
 
-        if (verifiers.checkEmpty(req.body.author)) {
-            return res.status(400).json({
-                success: false,
-                error: 'El nombre de la autora está vacío'
-            });
-        }
 
-        // Generar UUID para el proyecto
-        const id_projects = uuid();
 
-        // Obtener datos del cuerpo de la solicitud
-        const { name, slogan, repo, demo, technologies, desc, image, author, job, photo } = req.body;
-
-        // Conexión a la base de datos
-        const conn = await getConnection();
-        
-        // Insertar el proyecto en la base de datos
-        await conn.execute(
-            `INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, description, project_img) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [id_projects, name, slogan, repo, demo, technologies, desc, image]
-        );
-        
-        // Insertar la autora en la base de datos
-        await conn.execute(
-            `INSERT INTO authors (id_projects, author, job, author_img) VALUES (?, ?, ?, ?)`,
-            [id_projects, author, job, photo]
-        );
-
-  
-
-        const id = await coolProjectsModel.create(req.body);
         // Responder con éxito y la URL de la tarjeta
-        res.json({
-            success: true,
-            cardURL: `${req.protocol}://${req.hostname}/projectCard/${id}`
-        });
+        if( req.hostname === 'localhost' ) {
+            res.json({
+                success: true,
+                cardURL: `http://localhost:${PORT}/projectCard/${id}`
+            });
+        }
+        else {
+            res.json({
+                success: true,
+                cardURL: `https://${req.hostname}/projectCard/${id}`
+            });
+        }
+        
 
         await conn.end();
     } catch (err) {
@@ -153,6 +126,7 @@ app.post('/api/projectCard/', async (req, res) => {
 
 app.get('/projectCard/:id_projects', async (req, res) => {
 
+    
     //SELECT
     const projectData = await coolProjectsModel.get(req.params.id_projects);
     if (!projectData) {

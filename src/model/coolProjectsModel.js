@@ -1,33 +1,81 @@
 const { v4: uuid } = require('uuid');
-const COOL_PROJECTS_STORAGE = [];
+const verifiers = require('../utils/verifiers');
+const mysql = require('mysql2/promise');
+require('dotenv').config();
 
 
-async function create(data) {
-  const generated_id = uuid();
+async function getConnection() {
+  const connectionData = {
+    host: process.env["MYSQL_HOST"],
+    port: process.env["MYSQL_PORT"],
+    user: process.env["MYSQL_USER"],
+    password: process.env["MYSQL_PASS"],
+    database: process.env["MYSQL_SCHEMA"]
 
-  const [results] = conn.execute(`
-    INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, desc, image)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-    `,
-  [ generated_id, data.name, data.slogan, data.repo, data.demo, data.technologies, data.desc, data.image])
+  };
 
- // return generated_id;
-  
-  // Cerrar la conexión
-  await conn.end();
-  
-  // Verificar si se encontraron resultados
-  if (results.length > 0) {
-      return results[0];  // Retornar el primer (y único) resultado
-  } else {
-      return null;  // Si no hay resultados, devolver null
-  }
+  console.log("Intentando conectar con la BD:", connectionData); // Debugging
+
+  const connection = await mysql.createConnection(connectionData);
+  await connection.connect();
+  return connection;
 }
 
-function get(id_projects) {
+async function create(data) {
 
- // SELECT * FROM projects JOIN authors ON (projects.id_projects = authors.id_projects) WHERE project_id = ?;
- return COOL_PROJECTS_STORAGE.find(it => it.id === id_projects)
+  // Validación de datos vacíos
+  if (verifiers.checkEmpty(data.name)) {
+    return res.status(400).json({
+      success: false,
+      error: 'El nombre del proyecto está vacío'
+    });
+  }
+
+  if (verifiers.checkEmpty(data.author)) {
+    return res.status(400).json({
+      success: false,
+      error: 'El nombre de la autora está vacío'
+    });
+  }
+
+  // Generar UUID para el proyecto
+  const id_projects = uuid();
+
+  // Obtener datos del cuerpo de la solicitud
+  const { name, slogan, repo, demo, technologies, desc, image, author, job, photo } = data;
+
+  // Conexión a la base de datos
+  const conn = await getConnection();
+
+  // Insertar el proyecto en la base de datos
+  await conn.execute(
+    `INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, description, project_img) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [id_projects, name, slogan, repo, demo, technologies, desc, image]
+  );
+
+  // Insertar la autora en la base de datos
+  await conn.execute(
+    `INSERT INTO authors (id_projects, author, job, author_img) VALUES (?, ?, ?, ?)`,
+    [id_projects, author, job, photo]
+  );
+
+  // Cerrar la conexión
+  await conn.end();
+
+  return id_projects;  // Retornar el primer (y único) resultado
+}
+
+async function get(id_projects) {
+ // Conexión a la base de datos
+ const conn = await getConnection();
+
+ const [results] = await conn.query(`SELECT * FROM projects JOIN authors ON (projects.id_projects = authors.id_projects) WHERE projects.id_projects = ?;`, [id_projects]);
+
+ await conn.end();
+  // CACA  return COOL_PROJECTS_STORAGE.find(it => it.id === id_projects)
+
+  return results[0];
 }
 
 module.exports = {
