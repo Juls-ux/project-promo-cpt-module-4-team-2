@@ -4,3 +4,16 @@
     height: auto;
     object-fit: contain;
 }
+
+.listado__ul {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media screen and (max-width: 420px){
+    .listado__ul {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

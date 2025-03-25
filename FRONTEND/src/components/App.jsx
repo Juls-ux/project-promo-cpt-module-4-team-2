@@ -33,6 +33,9 @@ const INIT_ERRORS = {
   photo: "",
 };
 
+const API_URL = import.meta.env.PROD ?  '/api/projectCard' : 'http://localhost:3000/api/projectCard';
+
+
 function App() {
   const [formData, setFormData] = useState(() => {
     const storedData = localStorage.getItem("projectData");
@@ -57,7 +60,7 @@ function App() {
     
     if(isValid) {
    
-    const res = await fetch('http://localhost:3000/api/projectCard/', {
+    const res = await fetch(API_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body:JSON.stringify(formData)
