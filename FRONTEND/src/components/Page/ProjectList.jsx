@@ -15,7 +15,7 @@ function ProjectList(){
     return (
         <>
         <div className='listado'>
-            <h2>Últimos proyectos</h2>
+            <h2 className='title'>Últimos proyectos subidos</h2>
             <ul className='listado__ul'>
                 {projects.map((project) => (
                     <li key={project.id_projects}>

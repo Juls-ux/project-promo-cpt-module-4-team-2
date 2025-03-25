@@ -1,8 +1,17 @@
 .listado{
-&__ul{
+
+
+&__ul {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+
+    @media screen and (max-width: 420px) {
+        flex-direction: column;
+      }
+      
 }
 
 &__img{
