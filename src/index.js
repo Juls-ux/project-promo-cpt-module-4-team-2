@@ -41,12 +41,12 @@ app.use(express.static('public'));
 const staticServerPathAdmin = './static_files';
 app.use(express.static(path.join(__dirname, staticServerPathAdmin)));
 app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
-app.use(express.static(path.join(__dirname, 'static_public_frontend')));
+app.use(express.static(path.join(__dirname, 'static_public_frontend/','render', 'index.html')));
 
 
 
 // Ruta de ejemplo
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     const idUnico = uuid(); // Generar un UUID único
     res.render('projectCard', { id: idUnico }); // Pasar el UUID a la plantilla
     res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
