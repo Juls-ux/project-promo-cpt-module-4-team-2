@@ -142,7 +142,7 @@ app.get('/projectCard/:id_projects', async (req, res) => {
     console.log("Buscando proyecto con ID:", projectId); // Debugging
     
     // Aquí, debes obtener los datos del proyecto
-    const projectData = await coolProjectsModel.get(projectId);
+    const projectData = await coolProjectsModel.get((req.params.id_projects));
     
     if (!projectData) {
         console.error("Proyecto no encontrado para ID:", projectId);
