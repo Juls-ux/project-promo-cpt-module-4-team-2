@@ -137,13 +137,27 @@ app.post('/api/projectCard/', async (req, res) => {
 });
 
 
-app.get('/projectCard/:id_projects', async (req, res) => {
+//app.get('/projectCard/:id_projects', async (req, res) => {
     
     // Aquí, debes obtener los datos del proyecto
-    const projectData = await coolProjectsModel.get((req.params.id_projects));
+   // const projectData = await coolProjectsModel.get((req.params.id_projects));
     
     
     // Aquí debes pasar projectData a la vista
+   // res.render('projectCard', { projectData });
+//});
+
+ 
+// Endpoint: Obtener un proyecto por ID
+app.get('/projectCard/:id_projects', async (req, res) => {
+    const projectId = req.params.id_projects;
+    console.log("Buscando proyecto con ID:", projectId); // Debugging
+    const projectData = await coolProjectsModel.get(projectId) ?? null;
+    if (!projectData || Object.keys(projectData).length === 0) {
+        console.error("Proyecto no encontrado para ID:", projectId);
+        return res.status(404).send('Proyecto no encontrado');
+    }
+    console.log("Datos obtenidos del proyecto:", projectData); // Debugging
     res.render('projectCard', { projectData });
 });
 
