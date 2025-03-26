@@ -6,7 +6,7 @@ require('dotenv').config();
 const { v4: uuid } = require('uuid');
 
 const coolProjectsModel = require('./model/coolProjectsModel');
-
+const path = require('path')
 
 const ejs = require('ejs'); // Importar EJS
 
@@ -32,6 +32,16 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
+
+
+//Estáticos
+app.use(express.static('public'));
+
+const staticServerPathAdmin = './static_files';
+app.use(express.static(path.join(__dirname, staticServerPathAdmin)));
+app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
+
+
 
 
 // Ruta de ejemplo
@@ -165,16 +175,3 @@ app.get('/api/projects-list', async (req, res) => {
     }
 });
 
-// Servidor de estáticos
-const path = require('node:path');
-  
-app.use(express.static(path.join(__dirname, 'static_detail_styles')));
-  
-  //app.use(express.static(path.join(__dirname, 'static_public_frontend')));
-  
-  /*app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
-  });*/
-
-
-  ////SELECT * FROM projects p JOIN authors a ON (p.id_projects = a.id_projects);
