@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import PreviewCard from '../Projects/PreviewCard';
 
+
 const API_URL = import.meta.env.PROD ?  '/api/projects-list' : 'http://localhost:3000/api/projects-list';
 
 function ProjectList(){

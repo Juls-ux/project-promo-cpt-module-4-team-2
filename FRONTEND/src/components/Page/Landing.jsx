@@ -1,6 +1,7 @@
 import Hero from "../Layout/Hero";
 import { Link } from "react-router";
 import landingImage from "/src/images/cool-project.png";
+import { useState } from "react";
 
 import ProjectList from "./ProjectList";
 
@@ -21,6 +22,7 @@ function Landing() {
           </Link>
 
           <section>
+         
            <ProjectList/>
           </section>
         </Hero>

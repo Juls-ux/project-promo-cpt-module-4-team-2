@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 function PreviewCard({formData}) {
+  
     return (
         <article className="card">
         <h2 className="card__projectTitle"><span className="card__projectTitle--text">Personal project card</span></h2>

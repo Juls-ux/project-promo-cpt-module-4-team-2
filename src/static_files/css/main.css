@@ -112,13 +112,19 @@ body {
     flex-direction: column;
     justify-content: center;
     width: 100%;
+
     outline: solid 1px pink;
-  
-    background-image: url('../images/ebook-example.jpg');
     background-position: top center;
     background-size: cover;
+    object-fit: cover; 
+    width: 100vw;
+    height: 50vh;
+    overflow: hidden;
   }
-  
+
+
+
+
   .preview .card {
   
     margin-inline: 20px;
