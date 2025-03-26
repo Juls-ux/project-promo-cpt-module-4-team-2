@@ -6,6 +6,7 @@ require('dotenv').config();
 const { v4: uuid } = require('uuid');
 
 const coolProjectsModel = require('./model/coolProjectsModel');
+
 const path = require('path')
 
 const ejs = require('ejs'); // Importar EJS
@@ -46,9 +47,23 @@ app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
 
 // Ruta de ejemplo
 app.get('/', (req, res) => {
-    const idUnico = uuid(); // Generar un UUID único
-    res.render('projectCard', { id: idUnico }); // Pasar el UUID a la plantilla
-});
+    // En lugar de pasar sólo 'id', define projectData con datos predeterminados
+    const projectData = {
+    logoHeader: '/path/to/default-logo.png',
+    logoAdalab: '/path/to/default-adalab.png',
+    project_img: '/path/to/default-project.png',
+    author_img: '/path/to/default-author.png',
+    job: 'Sin definir',
+    author: 'Sin definir',
+    name: 'Sin definir',
+    slogan: 'Sin definir',
+    description: 'Sin definir',
+    technologies: 'Sin definir',
+    demo: '#',
+    repo: '#'
+    };
+    res.render('projectCard', { projectData });
+    });
 
 
 //Arrancamos Servidor
@@ -136,19 +151,24 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 app.get('/projectCard/:id_projects', async (req, res) => {
-
-
-    //SELECT
-    const projectData = await coolProjectsModel.get(req.params.id_projects);
+    const projectId = req.params.id_projects;
+    
+    console.log("Buscando proyecto con ID:", projectId); // Debugging
+    
+    // Aquí, debes obtener los datos del proyecto
+    const projectData = await coolProjectsModel.get(projectId);
+    
     if (!projectData) {
+        console.error("Proyecto no encontrado para ID:", projectId);
         return res.status(404).send('Proyecto no encontrado');
     }
     
-    // EJS
-    res.render('projectCard', {projectData})
-
-});
+    console.log("Datos obtenidos del proyecto:", projectData); // Debugging
     
+    // Aquí debes pasar projectData a la vista
+    res.render('projectCard', { projectData });
+});
+
 
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
