@@ -47,23 +47,9 @@ app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
 
 // Ruta de ejemplo
 app.get('/', (req, res) => {
-    // En lugar de pasar sólo 'id', define projectData con datos predeterminados
-    const projectData = {
-    logoHeader: '/path/to/default-logo.png',
-    logoAdalab: '/path/to/default-adalab.png',
-    project_img: '/path/to/default-project.png',
-    author_img: '/path/to/default-author.png',
-    job: 'Sin definir',
-    author: 'Sin definir',
-    name: 'Sin definir',
-    slogan: 'Sin definir',
-    description: 'Sin definir',
-    technologies: 'Sin definir',
-    demo: '#',
-    repo: '#'
-    };
-    res.render('projectCard', { projectData });
-    });
+    const idUnico = uuid(); // Generar un UUID único
+    res.render('projectCard', { id: idUnico }); // Pasar el UUID a la plantilla
+});
 
 
 //Arrancamos Servidor
