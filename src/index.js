@@ -74,27 +74,39 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 
-app.get('/projectCard/:id_projects', async (req, res) => {
-
-    try {
-        // Obtiene los datos del proyecto usando el modelo
-        const projectData = await coolProjectsModel.get(req.params.id_projects);
+ app.get('/projectCard/:id_projects', async (req, res) => {
+        const conn = await getConnection();
+        
+        try {
+            // Obtenemos el id del proyecto desde la URL
+            const id_projects = req.params.id_projects;
+            
+            if (!id_projects) {
+                return res.status(400).send("ID del proyecto no proporcionado");
+            }
     
-        // Si no se encuentra el proyecto, responde con un error 404
-        if (!projectData) {
-          return res.status(404).send("Proyecto no encontrado");
+            // Llamamos a la función get para obtener los datos completos del proyecto y autor
+            const [projectData] = await conn.query(`SELECT * FROM projects 
+                JOIN authors ON (projects.id_projects = authors.id_projects) 
+                WHERE projects.id_projects = ?;`, [id_projects])
+    
+            // Si no se encuentran datos del proyecto, retornar un error 404
+            if (!projectData || projectData.length === 0) {
+                return res.status(404).send("Proyecto no encontrado");
+            }
+    
+            // Si se encuentran los datos, los pasamos a la plantilla EJS
+            res.render('projectCardDetail', { projectData });
+        } catch (err) {
+            console.error("Error al obtener los datos del proyecto:", err);
+            res.status(500).send("Error interno del servidor");
+        } finally {
+            // Aseguramos de cerrar la conexión a la base de datos después de la consulta
+            if (conn) await conn.end();
         }
-    
-        // Renderiza la vista y pasa los datos del proyecto
-        res.render('projectCardDetail', {projectData});
-      } catch (err) {
-     
-        console.error("Error al obtener los datos del proyecto:", err);
-        res.status(500).send("Error interno del servidor");
-      }
     });
     
-
+    
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
     const conn = await getConnection(); 
