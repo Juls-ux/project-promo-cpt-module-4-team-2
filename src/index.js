@@ -123,7 +123,7 @@ const path = require('node:path')
 
 app.use(express.static(path.join(__dirname, './static_files')));
 
-app.use(express.static(path.join(__dirname, 'src', 'static_public_frontend')));
+app.use(express.static(path.join(__dirname, 'static_public_frontend')));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
