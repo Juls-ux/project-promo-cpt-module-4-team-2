@@ -66,19 +66,20 @@ async function create(data) {
   return id_projects;  // Retornar el primer (y único) resultado
 }
 
-
-//async function get(id_projects) {
+async function get(id_projects) {
  
-//const conn = await getConnection();
- //const [results] = await conn.query(`SELECT * FROM projects 
- // JOIN authors ON (projects.id_projects = authors.id_projects) 
-  //WHERE projects.id_projects = ?;`, [id_projects])
+ const conn = await getConnection();
 
- //await conn.end();
-  //return results[0];
-//}
+ const [results] = await conn.query(`SELECT * FROM projects 
+  JOIN authors 
+  ON (projects.id_projects = authors.id_projects) 
+  WHERE projects.id_projects = ?;`, [id_projects])
+
+ await conn.end();
+  return results[0];
+}
 
 module.exports = {
   create,
-//  get
+  get
 }
