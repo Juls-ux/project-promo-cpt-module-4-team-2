@@ -2,11 +2,9 @@ const mysql = require ('mysql2/promise');
 
 const express = require('express');
 const cors = require('cors');
+const coolProjectsModel = require('./model/coolProjectsModel');
 require('dotenv').config();
 const { v4: uuid } = require('uuid');
-
-const coolProjectsModel = require('./model/coolProjectsModel');
-
 
 const ejs = require('ejs'); // Importar EJS
 
@@ -77,6 +75,7 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 app.get('/projectCard/:id_projects', async (req, res) => {
+
     try {
         // Obtiene los datos del proyecto usando el modelo
         const projectData = await coolProjectsModel.get(req.params.id_projects);
@@ -87,18 +86,14 @@ app.get('/projectCard/:id_projects', async (req, res) => {
         }
     
         // Renderiza la vista y pasa los datos del proyecto
-        res.render('projectCardDetail', {
-          projectData  // Los datos del proyecto que se mostrarán en la vista
-        });
+        res.render('projectCardDetail', {projectData});
       } catch (err) {
-        // Si ocurre un error, responde con un mensaje de error
+     
         console.error("Error al obtener los datos del proyecto:", err);
         res.status(500).send("Error interno del servidor");
       }
     });
     
-
-
 
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
@@ -130,10 +125,9 @@ app.get('/api/projects-list', async (req, res) => {
 //Estáticos
 const path = require('node:path')
 
-
 app.use(express.static(path.join(__dirname, './static_files')));
 
-app.use(express.static(path.join(__dirname, 'src', 'static_public_frontend','frontend')));
+app.use(express.static(path.join(__dirname, 'src', 'static_public_frontend')));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
