@@ -76,7 +76,7 @@ app.post('/api/projectCard/', async (req, res) => {
 
     app.get('/projectCard/:id_projects', async (req, res) => {
 
-        const projectData = await coolProjectsModel.get(req.params.id_projects);
+        const projectData = await coolProjectsModel.get(id_projects);
         if (!projectData) {
             return res.status(404).send('Proyecto no encontrado');
         }
