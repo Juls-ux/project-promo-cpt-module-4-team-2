@@ -39,7 +39,7 @@ app.use(express.json({ limit: '50mb' }));
 // Ruta de ejemplo
 app.get('/', (req, res) => {
     const idUnico = uuid(); // Generar un UUID único
-    res.render('projectCard', { id: idUnico }); // Pasar el UUID a la plantilla
+    res.render('projectCardDetail', { id: idUnico }); // Pasar el UUID a la plantilla
   });
 
 
@@ -78,27 +78,13 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 app.get('/projectCard/:id_projects', async (req, res) => {
-        try {
-            const id = req.params.id_projects;
-            console.log("ID recibido:", id);
-            
-            // Obtener los datos del proyecto
-            const projectData = await coolProjectsModel.get(id);
-            console.log("Datos del proyecto:", projectData);
-            
-            if (!projectData) {
-              console.log("No se encontró ningún proyecto con ID:", id);
-              return res.status(404).send('Proyecto no encontrado');
-            }
-            
-            // Asegúrate de que projectData se pasa correctamente a la plantilla
-            console.log("Renderizando con datos:", { projectData });
-            res.render('projectCardDetail', { projectData: projectData });
-            
-          } catch (error) {
-            console.error("Error completo:", error);
-            res.status(500).send('Error del servidor');
-          }
+    const projectData = await coolProjectsModel.get(req.params.id_projects);
+    if (!projectData) {
+        return res.status(404).send('Proyecto no encontrado');
+    }
+    
+    // EJS
+    res.render('projectCardDetail', {projectData})
       });
     
 
