@@ -77,13 +77,20 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 
-app.get('/projectCard/:id_projects', async (req, res) => {
-
-       const projectData =  coolProjectsModel.get(req.params.id_projects);
-        
-        res.render('projectCardDetail', { projectData });
-});
-        
+    app.get('/projectCard/:id_projects', async (req, res) => {
+        try {
+            const projectData = await coolProjectsModel.get(req.params.id_projects); // Agregar "await"
+            
+            if (!projectData) {
+                return res.status(404).send("Proyecto no encontrado");
+            }
+     
+            res.render('projectCardDetail', { projectData });
+        } catch (error) {
+            console.error("Error obteniendo proyecto:", error);
+            res.status(500).send("Error interno del servidor");
+        }
+     });
     
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
