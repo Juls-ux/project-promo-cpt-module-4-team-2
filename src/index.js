@@ -51,40 +51,17 @@ app.listen(PORT, () => {
 
 
 //3º endpoint con UUID
-app.post('/api/projectCard/', async (req, res) => {
-    try {
-      
-            const id = await coolProjectsModel.create(req.body);
-    
-            res.json({
-                success: true,
-                cardURL: req.hostname === 'localhost'
-                    ? `http://localhost:${PORT}/projectCard/${id}`
-                    : `https://${req.hostname}/projectCard/${id}`
-            });
-    
-        } catch (err) {
-            console.error("Error al insertar en la BD:", err);
-            res.status(500).json({
-                success: false,
-                error: 'El servidor no está disponible en estos momentos'
-            });
-        }
-    });
+app.get('/projectCard/:id_projects', async (req, res) => {
+    const id_projects = req.params.id_projects;
+    const projectData = await coolProjectsModel.get(id_projects);
 
+    if (!projectData) {
+        return res.status(404).send('Proyecto no encontrado');
+    }
 
-
-    app.get('/projectCard/:id_projects', async (req, res) => {
-
-        const projectData = await coolProjectsModel.get(id_projects);
-        if (!projectData) {
-            return res.status(404).send('Proyecto no encontrado');
-        }
-        
-        // EJS
-        res.render('projectCardDetail', {projectData})
-    
-    });
+    // EJS
+    res.render('projectCardDetail', { projectData });
+});
     
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
