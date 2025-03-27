@@ -17,7 +17,7 @@
     <main>
       <section class="preview">
         <div class="projectImage">
-          <img class="card__projectImage" src="<%= projectData.projects.project_img %>" alt="Imagen del proyecto">
+          <img class="card__projectImage"  src="projectData.project_img" alt="Imagen del proyecto">
         </div>
         <article class="card">
           <h2 class="card__projectTitle">
@@ -26,6 +26,7 @@
           <div class="card__author">
             <div class="card__authorPhoto">
               <img src="<%= projectData.author_img %>" alt="Foto del autor" class="card__authorPhoto">
+
             </div>
             <p class="card__job"><%= projectData.job %></p>
             <h3 class="card__name"><%= projectData.author %></h3>
@@ -36,17 +37,18 @@
             <h3 class="card__descriptionTitle">Product description</h3>
             <p class="card__description"><%= projectData.description %></p>
             <div class="card__technicalInfo">
-              <p class="card__technologies"><%= projectData.technologies %></p>
+              <p class="card__technologies"> <%= projectData.technologies %></p>
 
-              <a class="icon icon__www" href="<%= projectData.demo %>" title="Haz click para ver el proyecto online" target="_blank" rel="noopener noreferrer">
-                  <img src="/images/icons/globe-solid.svg" alt="Web link"> Web link
-              </a>
+            <a class="icon icon__www" href="<%= projectData.demo %>" title="Haz click para ver el proyecto online" target="_blank" rel="noopener noreferrer">
+                <img src="/images/icons/globe-solid.svg" alt="Web link"> Web link
+            </a>
               <a class="icon icon__github" href="<%= projectData.repo %>" title="Haz click para ver el código del proyecto" target="_blank" rel="noopener noreferrer">
                 <img src="/images/icons/github.svg" alt="Web link"> GitHub link</a>
             </div>
           </div>
         </article>
       </section>
+      
     </main>
     <footer class="footer">
       <img class="logoSponsor" src="/images/adalab.png" alt="Logo Adalab">

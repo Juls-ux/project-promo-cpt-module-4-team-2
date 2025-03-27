@@ -70,21 +70,10 @@ async function  get(id_projects) {
  // Conexión a la base de datos
  const conn = await getConnection();
 
- const [results] = await conn.query(`SELECT 
-    projects.id_projects, 
-    projects.name, 
-    projects.slogan, 
-    projects.description, 
-    projects.technologies, 
-    projects.project_img, 
-    authors.author, 
-    authors.job, 
-    authors.author_img, 
-    projects.repo, 
-    projects.demo
-  FROM projects
-  JOIN authors ON projects.id_projects = authors.id_projects
-  WHERE projects.id_projects = ?
+ const [results] = await conn.query(`SELECT projects.*, authors.author, authors.job, authors.author_img 
+FROM projects
+JOIN authors ON projects.id_projects = authors.id_projects
+WHERE projects.id_projects = ?
 `, [id_projects]);
 
  await conn.end();
