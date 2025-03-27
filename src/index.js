@@ -190,8 +190,8 @@ app.use(express.static('public'));
 
 app.use(express.static(path.join(__dirname, './static_files')));
 app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
-app.use(express.static(path.join(__dirname, 'src', 'static_public_frontend', 'frontend')));
+app.use(express.static(path.join(__dirname, 'src', 'static_public_frontend','frontend')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'static_public_frontend', 'frontend', 'index.html'));
+    res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
   });
