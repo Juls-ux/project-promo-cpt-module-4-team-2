@@ -66,23 +66,33 @@ async function create(data) {
   return id_projects;  // Retornar el primer (y único) resultado
 }
 
-async function  get(id_projects) {
- // Conexión a la base de datos
- const conn = await getConnection();
+async function get(id_projects) {
+  let conn;
+  try {
+    conn = await getConnection();
 
- const [results] = await conn.query(`
-  SELECT projects.*, authors.author, authors.job, authors.author_img 
-FROM projects
-JOIN authors ON projects.id_projects = authors.id_projects
-WHERE projects.id_projects = ?
-`, [id_projects]);
+    const [results] = await conn.query(`
+      SELECT projects.*, authors.author, authors.job, authors.author_img 
+      FROM projects
+      JOIN authors ON projects.id_projects = authors.id_projects
+      WHERE projects.id_projects = ?
+    `, [id_projects]);
 
- await conn.end();
+    // Check if the project was found
+    if (results.length === 0) {
+      throw new Error(`Project with ID ${id_projects} not found`);
+    }
 
-
-  return results[0];
+    return results[0];
+  } catch (err) {
+    console.error("Error fetching project:", err.message);
+    throw new Error('Error fetching project details');
+  } finally {
+    if (conn) {
+      await conn.end();
+    }
+  }
 }
-
 module.exports = {
   create,
   get
