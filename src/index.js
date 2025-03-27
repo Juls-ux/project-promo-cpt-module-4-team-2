@@ -37,10 +37,10 @@ app.use(express.json({ limit: '50mb' }));
 
 
 // Ruta de ejemplo
-app.get('/',   (req, res) => {
-    const projectData =  coolProjectsModel.get(req.params.id_projects);
+app.get('/', (req, res) => {
+    
     const idUnico = uuid(); // Generar un UUID único
-    res.render('projectCardDetail',{projectData}, { id: idUnico }); // Pasar el UUID a la plantilla
+    res.render('projectCardDetail', { id: idUnico }); // Pasar el UUID a la plantilla
   });
 
 
