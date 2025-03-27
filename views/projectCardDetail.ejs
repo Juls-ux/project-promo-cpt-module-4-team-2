@@ -38,12 +38,12 @@
               <p class="card__description"><%= projectData.description || 'Descripción no disponible' %></p>
               <div class="card__technicalInfo">
                 <p class="card__technologies"><%= projectData.technologies || 'Tecnologías no disponibles' %></p>
-      
                 <a class="icon icon__www" href="<%= projectData.demo || '#' %>" title="Haz click para ver el proyecto online" target="_blank" rel="noopener noreferrer">
-                    <img src="/images/icons/globe-solid.svg" alt="Web link"> Web link
+                  <img src="/images/icons/globe-solid.svg" alt="Web link"> Web link
                 </a>
                 <a class="icon icon__github" href="<%= projectData.repo || '#' %>" title="Haz click para ver el código del proyecto" target="_blank" rel="noopener noreferrer">
-                  <img src="/images/icons/github.svg" alt="Web link"> GitHub link</a>
+                  <img src="/images/icons/github.svg" alt="Web link"> GitHub link
+                </a>
               </div>
             </div>
           </article>
@@ -51,6 +51,7 @@
       <% } else { %>
         <p>Proyecto no encontrado</p>
       <% } %>
+      
     </main>
     <footer class="footer">
       <img class="logoSponsor" src="/images/adalab.png" alt="Logo Adalab">
