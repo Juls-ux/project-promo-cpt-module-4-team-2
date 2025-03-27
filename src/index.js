@@ -32,6 +32,73 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 
+
+
+async function create(data) {
+
+    // Validación de datos vacíos
+    if (verifiers.checkEmpty(data.name)) {
+      return res.status(400).json({
+        success: false,
+        error: 'El nombre del proyecto está vacío'
+      });
+    }
+  
+    if (verifiers.checkEmpty(data.author)) {
+      return res.status(400).json({
+        success: false,
+        error: 'El nombre de la autora está vacío'
+      });
+    }
+  
+    // Generar UUID para el proyecto
+    const id_projects = uuid();
+  
+    // Obtener datos del cuerpo de la solicitud
+    const { name, slogan, repo, demo, technologies, desc, image, author, job, photo } = data;
+  
+    // Conexión a la base de datos
+    const conn = await getConnection();
+  
+    // Insertar el proyecto en la base de datos
+    await conn.execute(
+      `INSERT INTO projects (id_projects, name, slogan, repo, demo, technologies, description, project_img) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id_projects, name, slogan, repo, demo, technologies, desc, image]
+    );
+  
+    // Insertar la autora en la base de datos
+    await conn.execute(
+      `INSERT INTO authors (id_projects, author, job, author_img) VALUES (?, ?, ?, ?)`,
+      [id_projects, author, job, photo]
+    );
+  
+    // Cerrar la conexión
+    await conn.end();
+  
+    return id_projects;  // Retornar el primer (y único) resultado
+  }
+  
+  async function get(id_projects) {
+   // Conexión a la base de datos
+   const conn = await getConnection();
+  
+   const [results] = await conn.query(`SELECT * FROM projects 
+    JOIN authors ON (projects.id_projects = authors.id_projects) 
+    WHERE projects.id_projects = ?;`, 
+    [id_projects]);
+  
+   await conn.end();
+  
+  
+    return results[0];
+  }
+
+
+
+
+
+
 // Ruta de ejemplo
 app.get('/', (req, res) => {
     
@@ -51,17 +118,37 @@ app.listen(PORT, () => {
 
 
 //3º endpoint con UUID
+app.post('/api/projectCard/', async (req, res) => {
+    try {
+      
+            const id = await coolProjectsModel.create(req.body);
+    
+            res.json({
+                success: true,
+                cardURL: req.hostname === 'localhost'
+                    ? `http://localhost:${PORT}/projectCard/${id}`
+                    : `https://${req.hostname}/projectCard/${id}`
+            });
+    
+        } catch (err) {
+            console.error("Error al insertar en la BD:", err);
+            res.status(500).json({
+                success: false,
+                error: 'El servidor no está disponible en estos momentos'
+            });
+        }
+    });
+
+
+
+
 app.get('/projectCard/:id_projects', async (req, res) => {
-    const id_projects = req.params.id_projects;
-    const projectData = await coolProjectsModel.get(id_projects);
 
-    if (!projectData) {
-        return res.status(404).send('Proyecto no encontrado');
-    }
-
-    // EJS
-    res.render('projectCardDetail', { projectData });
+       const projectData =  coolProjectsModel.get(req.params.id_projects);
+        
+        res.render('projectCardDetail', { projectData });
 });
+        
     
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
