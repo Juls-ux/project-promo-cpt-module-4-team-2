@@ -77,17 +77,24 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 app.get('/projectCard/:id_projects', async (req, res) => {
-    
-    console.log('Requested ID:', req.params.id_projects); // Log the ID to verify
-    const projectData = await coolProjectsModel.get(req.params.id_projects);
-    
-    res.render('projectCardDetail', { projectData });
-});
-    
-
-
-
-
+        try {
+          // Obtiene los datos del proyecto usando el modelo
+          const projectData = await coolProjectsModel.get(req.params.id_projects);
+          
+          // Si no se encuentra el proyecto, responde con un error 404
+          if (!projectData) {
+            return res.status(404).send("Proyecto no encontrado");
+          }
+      
+          // Renderiza la vista y pasa los datos del proyecto
+          res.render('projectCardDetail', {
+            projectData  // Los datos del proyecto que se mostrarán en la vista
+          });
+        } catch (err) {
+          // Si ocurre un error, responde con un mensaje de error
+          res.status(500).send("Error interno del servidor");
+        }
+    });
 
 
 

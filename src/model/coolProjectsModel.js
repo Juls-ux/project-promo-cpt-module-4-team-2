@@ -71,25 +71,23 @@ async function  get(id_projects) {
  const conn = await getConnection();
 
  const [results] = await conn.query(`SELECT 
-    projects.id_projects, 
-    projects.name, 
-    projects.slogan, 
-    projects.description, 
-    projects.technologies, 
-    projects.project_img, 
-    authors.author, 
-    authors.job, 
-    authors.author_img, 
-    projects.repo, 
-    projects.demo
-  FROM projects
-  JOIN authors ON projects.id_projects = authors.id_projects
-  WHERE projects.id_projects = ?
+      projects.id_projects, 
+      projects.name, 
+      projects.slogan, 
+      projects.description, 
+      projects.technologies, 
+      projects.project_img, 
+      authors.author, 
+      authors.job, 
+      authors.author_img, 
+      projects.repo, 
+      projects.demo
+    FROM projects
+    JOIN authors ON projects.id_projects = authors.id_projects
+    WHERE projects.id_projects = ?
 `, [id_projects]);
 
  await conn.end();
-
-
   return results[0];
 }
 
