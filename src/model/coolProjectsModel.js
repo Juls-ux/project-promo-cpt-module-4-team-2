@@ -66,28 +66,22 @@ async function create(data) {
   return id_projects;  // Retornar el primer (y único) resultado
 }
 
-async function get(id_projects) {
-  // Conexión a la base de datos
-  const conn = await getConnection();
+async function  get(id_projects) {
+ // Conexión a la base de datos
+ const conn = await getConnection();
 
-  try {
-    // Realizar la consulta a la base de datos
-    const [results] = await conn.query(`
-      SELECT * FROM projects 
-      JOIN authors ON (projects.id_projects = authors.id_projects) 
-      WHERE projects.id_projects = ?;`, [id_projects]);
+ const [results] = await conn.query(`
+  SELECT projects.*, authors.author, authors.job, authors.author_img 
+FROM projects
+JOIN authors ON projects.id_projects = authors.id_projects
+WHERE projects.id_projects = ?
+`, [id_projects]);
 
-    // Retornar el primer resultado si existe, sino retornar null
-    return results.length > 0 ? results[0] : null;
-  } catch (error) {
-    console.error("Error en la consulta:", error);
-    throw new Error('Error al obtener los datos del proyecto');
-  } finally {
-    // Cerrar la conexión después de la consulta
-    await conn.end();
-  }
+ await conn.end();
+
+
+  return results[0];
 }
-
 
 module.exports = {
   create,
