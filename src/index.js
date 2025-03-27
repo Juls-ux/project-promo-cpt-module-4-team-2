@@ -6,7 +6,7 @@ require('dotenv').config();
 const { v4: uuid } = require('uuid');
 
 const coolProjectsModel = require('./model/coolProjectsModel');
-const path = require('path')
+
 
 const ejs = require('ejs'); // Importar EJS
 
@@ -32,15 +32,6 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-
-
-//Estáticos
-app.use(express.static('public'));
-
-const staticServerPathAdmin = './static_files';
-app.use(express.static(path.join(__dirname, staticServerPathAdmin)));
-app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
-app.use(express.static(path.join(__dirname, 'src/static_public_frontend/render')));
 
 
 
@@ -164,3 +155,16 @@ app.get('/api/projects-list', async (req, res) => {
         if (conn) await conn.end(); // Cerrar conexión siempre
     }
 });
+
+
+//Estáticos
+const path = require('node:path')
+app.use(express.static('public'));
+
+app.use(express.static(path.join(__dirname, './static_files')));
+app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
+app.use(express.static(path.join(__dirname, 'src/static_public_frontend/frontend')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'static_public_frontend', 'index.html'));
+  });
