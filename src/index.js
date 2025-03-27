@@ -36,12 +36,27 @@ app.use(express.json({ limit: '50mb' }));
 
 
 
-
 // Ruta de ejemplo
 app.get('/', (req, res) => {
     const idUnico = uuid(); // Generar un UUID único
-    res.render('projectCardDetail', { id: idUnico }); // Pasar el UUID a la plantilla
-});
+  
+    // Crear un objeto projectData con el UUID y datos por defecto
+    const defaultProjectData = {
+      id_projects: idUnico,
+      project_img: '/images/default_project.png', // Ruta a una imagen predeterminada
+      author_img: '/images/default_author.png',
+      job: 'Sin información',
+      author: 'Sin información',
+      name: 'Proyecto sin definir',
+      slogan: 'Sin slogan',
+      description: 'No hay descripción disponible.',
+      technologies: 'No especificado',
+      demo: '#',
+      repo: '#'
+    };
+  
+    res.render('projectCardDetail', { projectData: defaultProjectData });
+  });
 
 
 //Arrancamos Servidor
@@ -117,7 +132,7 @@ app.post('/api/projectCard/', async (req, res) => {
     });
 
 
-    app.get('/projectCard/:id_projects', async (req, res) => {
+app.get('/projectCard/:id_projects', async (req, res) => {
         try {
             const id = req.params.id_projects;
             console.log("ID recibido:", id);
