@@ -67,8 +67,7 @@ async function create(data) {
 }
 
 async function get(id_projects) {
- 
- const conn = await getConnection();
+  const conn = await getConnection();
 
  const [results] = await conn.query(`SELECT * FROM projects 
   JOIN authors 

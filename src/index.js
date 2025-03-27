@@ -75,8 +75,7 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 app.get('/projectCard/:id_projects', async (req, res) => {
-        const conn = await getConnection();
-        
+
         try {
             const projectData = await coolProjectsModel.get(req.params.id_projects);
         
