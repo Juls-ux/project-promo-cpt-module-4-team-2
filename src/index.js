@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'src/static_public_frontend/render')
 // Ruta de ejemplo
 app.get('/', (req, res) => {
     const idUnico = uuid(); // Generar un UUID único
-    res.render('projectCard', { id: idUnico }); // Pasar el UUID a la plantilla
+    res.render('projectCardDetail', { id: idUnico }); // Pasar el UUID a la plantilla
 });
 
 
@@ -128,15 +128,13 @@ app.post('/api/projectCard/', async (req, res) => {
 
 app.get('/projectCard/:id_projects', async (req, res) => {
 
-
-    //SELECT
     const projectData = await coolProjectsModel.get(req.params.id_projects);
     if (!projectData) {
         return res.status(404).send('Proyecto no encontrado');
     }
     
     // EJS
-    res.render('projectCard', {projectData})
+    res.render('projectCardDetail', {projectData})
 
 });
     
