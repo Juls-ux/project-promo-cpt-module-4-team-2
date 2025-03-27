@@ -120,51 +120,24 @@ app.post('/api/projectCard/', async (req, res) => {
     app.get('/projectCard/:id_projects', async (req, res) => {
         try {
             const id = req.params.id_projects;
-            console.log("ID recibido en la ruta:", id);
+            console.log("ID recibido:", id);
             
+            // Obtener los datos del proyecto
             const projectData = await coolProjectsModel.get(id);
-            console.log("Datos del proyecto recibidos del modelo:", projectData);
+            console.log("Datos del proyecto:", projectData);
             
             if (!projectData) {
-              console.log("Proyecto no encontrado, enviando 404");
-              return res.status(404).render('error', { 
-                message: 'Proyecto no encontrado',
-                error: { status: 404, stack: '' }
-              });
+              console.log("No se encontró ningún proyecto con ID:", id);
+              return res.status(404).send('Proyecto no encontrado');
             }
             
-            // Verificar que todos los campos necesarios existen
-            const requiredFields = ['project_img', 'author_img', 'job', 'author', 'name', 'slogan', 'description', 'technologies', 'demo', 'repo'];
-            const missingFields = requiredFields.filter(field => !projectData[field]);
+            // Asegúrate de que projectData se pasa correctamente a la plantilla
+            console.log("Renderizando con datos:", { projectData });
+            res.render('projectCardDetail', { projectData: projectData });
             
-            if (missingFields.length > 0) {
-              console.log("Campos faltantes en projectData:", missingFields);
-            }
-            
-            // Crear un objeto con valores predeterminados para campos faltantes
-            const safeProjectData = {
-              project_img: projectData.project_img || '/images/default-project.png',
-              author_img: projectData.author_img || '/images/default-author.png',
-              job: projectData.job || 'Desarrollador',
-              author: projectData.author || 'Anónimo',
-              name: projectData.name || 'Proyecto sin nombre',
-              slogan: projectData.slogan || '',
-              description: projectData.description || 'Sin descripción',
-              technologies: projectData.technologies || '',
-              demo: projectData.demo || '#',
-              repo: projectData.repo || '#',
-              // Incluir todos los campos originales también
-              ...projectData
-            };
-            
-            console.log("Renderizando plantilla con datos:", safeProjectData);
-            res.render('projectCardDetail', { projectData: safeProjectData });
           } catch (error) {
-            console.error("Error completo en la ruta /projectCard/:id_projects:", error);
-            res.status(500).render('error', { 
-              message: 'Error del servidor',
-              error: { status: 500, stack: process.env.NODE_ENV === 'development' ? error.stack : '' }
-            });
+            console.error("Error completo:", error);
+            res.status(500).send('Error del servidor');
           }
       });
     
