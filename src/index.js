@@ -34,8 +34,6 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 
-
-
 // Ruta de ejemplo
 app.get('/', (req, res) => {
     
@@ -50,8 +48,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Cool Projects server started at <http://localhost:${PORT}/>`);  
 });
-
-
 
 
 
@@ -78,16 +74,29 @@ app.post('/api/projectCard/', async (req, res) => {
     });
 
 
+
+
 app.get('/projectCard/:id_projects', async (req, res) => {
+
+    console.log('Requested ID:', req.params.id_projects); // Log the ID to verify
+
     const projectData = await coolProjectsModel.get(req.params.id_projects);
+  
     if (!projectData) {
-        return res.status(404).send('Proyecto no encontrado');
+      return res.status(404).send('Proyecto no encontrado');
     }
-    
+  
     // EJS
-    res.render('projectCardDetail', {projectData})
-      });
+    res.render('projectCardDetail', { projectData });
+});
     
+
+
+
+
+
+
+
 
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
