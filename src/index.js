@@ -80,12 +80,7 @@ app.get('/projectCard/:id_projects', async (req, res) => {
     
     console.log('Requested ID:', req.params.id_projects); // Log the ID to verify
     const projectData = await coolProjectsModel.get(req.params.id_projects);
-  
-    if (!projectData) {
-      return res.status(404).send('Proyecto no encontrado');
-    }
-  
-    // EJS
+    
     res.render('projectCardDetail', { projectData });
 });
     
