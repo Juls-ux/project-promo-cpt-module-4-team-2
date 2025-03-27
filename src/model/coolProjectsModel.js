@@ -66,6 +66,11 @@ async function create(data) {
   return id_projects;  // Retornar el primer (y único) resultado
 }
 
+
+
+
+
+
 async function get(id_projects) {
  // Conexión a la base de datos
  const conn = await getConnection();

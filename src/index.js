@@ -34,15 +34,6 @@ app.use(express.json({ limit: '50mb' }));
 
 
 
-// Ruta de ejemplo
-app.get('/', (req, res) => {
-    
-    const idUnico = uuid(); // Generar un UUID único
-    res.render('projectCardDetail', { id: idUnico }); // Pasar el UUID a la plantilla
-   
-  });
-
-
 //Arrancamos Servidor
 
 const PORT = process.env.PORT || 3000;
@@ -79,6 +70,8 @@ app.post('/api/projectCard/', async (req, res) => {
 
     app.get('/projectCard/:id_projects', async (req, res) => {
         try {
+     
+
             const projectData = await coolProjectsModel.get(req.params.id_projects); // Agregar "await"
             
             if (!projectData) {
@@ -91,6 +84,12 @@ app.post('/api/projectCard/', async (req, res) => {
             res.status(500).send("Error interno del servidor");
         }
      });
+
+
+
+
+
+
     
 //4º Endpoint LISTADO DE PROYECTOS
 app.get('/api/projects-list', async (req, res) => {
