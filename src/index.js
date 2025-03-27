@@ -39,23 +39,7 @@ app.use(express.json({ limit: '50mb' }));
 // Ruta de ejemplo
 app.get('/', (req, res) => {
     const idUnico = uuid(); // Generar un UUID único
-  
-    // Crear un objeto projectData con el UUID y datos por defecto
-    const defaultProjectData = {
-      id_projects: idUnico,
-      project_img: '/images/default_project.png', // Ruta a una imagen predeterminada
-      author_img: '/images/default_author.png',
-      job: 'Sin información',
-      author: 'Sin información',
-      name: 'Proyecto sin definir',
-      slogan: 'Sin slogan',
-      description: 'No hay descripción disponible.',
-      technologies: 'No especificado',
-      demo: '#',
-      repo: '#'
-    };
-  
-    res.render('projectCardDetail', { projectData: defaultProjectData });
+    res.render('projectCard', { id: idUnico }); // Pasar el UUID a la plantilla
   });
 
 
@@ -67,45 +51,6 @@ app.listen(PORT, () => {
 });
 
 
-//1º endpoint Proyectos Molones-- AUTHORS
-
-app.get('/api/authors', async (req, res) => {
-
-    const conn = await getConnection();
-
-    const [results] = await conn.query(`SELECT * FROM defaultdb.authors;`);
-
-    await conn.end();
-
-    const numOfElements = results.length;
-
-    res.json({
-        info: { count: numOfElements },
-        results: results,
-
-    });
-
-});
-
-//2º endpoint Proyectos Molones-- PROJECTS
-
-app.get('/api/projects', async (req, res) => {
-
-    const conn = await getConnection();
-
-    const [results] = await conn.query(`SELECT * FROM defaultdb.projects;`);
-
-    await conn.end();
-
-    const numOfElements = results.length;
-
-    res.json({
-        info: { count: numOfElements },
-        results: results,
-
-    });
-
-});
 
 
 
@@ -186,10 +131,10 @@ app.get('/api/projects-list', async (req, res) => {
 
 //Estáticos
 const path = require('node:path')
-app.use(express.static('public'));
+
 
 app.use(express.static(path.join(__dirname, './static_files')));
-app.use('/src/images', express.static(path.join(__dirname, 'src/images')));
+
 app.use(express.static(path.join(__dirname, 'src', 'static_public_frontend','frontend')));
 
 app.get('*', (req, res) => {
