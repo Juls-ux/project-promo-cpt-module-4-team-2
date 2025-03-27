@@ -118,15 +118,18 @@ app.post('/api/projectCard/', async (req, res) => {
 
 
 app.get('/projectCard/:id_projects', async (req, res) => {
+    console.log("ID recibido:", req.params.id_projects);
+    
+    const projectData = coolProjectsModel.get(req.params.id_projects);
 
-    const projectData = await coolProjectsModel.get(req.params.id_projects);
     if (!projectData) {
+        console.error("❌ Proyecto no encontrado en la BD para ID:", req.params.id_projects);
         return res.status(404).send('Proyecto no encontrado');
     }
     
-    // EJS
-    res.render('projectCardDetail', {projectData})
+    console.log("✅ Proyecto obtenido:", projectData);
 
+    res.render('projectCardDetail', { projectData });
 });
     
 
