@@ -69,10 +69,22 @@ async function create(data) {
 async function get(id_projects) {
   const conn = await getConnection();
 
- const [results] = await conn.query(`SELECT * FROM projects 
+ const [results] = await conn.query(`  SELECT 
+    projects.project_img, 
+    projects.name, 
+    projects.slogan, 
+    projects.description, 
+    projects.technologies, 
+    projects.demo, 
+    projects.repo, 
+    authors.author_img, 
+    authors.job, 
+    authors.author
+  FROM projects 
   JOIN authors 
-  ON (projects.id_projects = authors.id_projects) 
-  WHERE projects.id_projects = ?;`, [id_projects])
+  ON projects.id_projects = authors.id_projects 
+  WHERE projects.id_projects = ?;
+`, [id_projects]);
 
  await conn.end();
   return results[0];
