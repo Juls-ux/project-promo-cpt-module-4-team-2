@@ -76,20 +76,9 @@ app.post('/api/projectCard/', async (req, res) => {
 
 app.get('/projectCard/:id_projects', async (req, res) => {
 
-        try {
-            const projectData = await coolProjectsModel.get(req.params.id_projects);
+       const projectData =  coolProjectsModel.get(req.params.id_projects);
         
-    
-            if (!projectData) {
-              return res.status(404).send("Proyecto no encontrado");
-            }
-        
-            res.render('projectCardDetail', {projectData});
-          } catch (err) {
-         
-            console.error("Error al obtener los datos del proyecto:", err);
-            res.status(500).send("Error interno del servidor");
-          }
+        res.render('projectCardDetail', { projectData });
         });
         
     
